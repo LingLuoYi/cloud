@@ -1,0 +1,54 @@
+spring:
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    url: jdbc:mysql://45.195.203.169:3306/cloud?useUnicode=true&characterEncoding=utf-8&useSSL=true&autoReconnect=true&failOverReadOnly=false
+#    username: root
+#    password: qWeq14WQ
+  jpa:
+    database: mysql
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        temp:
+           use_jdbc_metadata_defaults: false
+  thymeleaf:
+    mode: LEGACYHTML5
+    cache: false
+  mail:
+    host: smtp.exmail.qq.com
+    port: 465
+    username: mayi001@szhl888.com
+    password: MAyi2018
+    protocol: smtp
+    default-encoding: utf-8
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+           class: javax.net.ssl.SSLSocketFactory
+  redis:
+     host: 127.0.0.1
+     port: 6379
+     password:
+     database: 0
+     timeout: 2000
+c3p0:
+  jdbcUrl: jdbc:mysql://45.195.203.169:3306/cloud?useUnicode=true&characterEncoding=utf-8&useSSL=true
+  user: root
+  password: qWeq14WQ
+  driverClass: com.mysql.jdbc.Driver
+  minPoolSize: 2
+  maxPoolSize: 10
+  maxIdleTime: 1800000
+  acquireIncrement: 1
+  maxStatements: 1000
+  initialPoolSize: 3
+  idleConnectionTestPeriod: 90
+  checkoutTimeout: 5000
+  acquireRetryAttempts: 30
+  acquireRetryDelay: 1000
+  breakAfterAcquireFailure: false
+  testConnectionOnCheckout: false
