@@ -1,6 +1,7 @@
 package com.henglong.cloud.config;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import com.henglong.cloud.config.redis.RedisCacheManager;
 import com.henglong.cloud.config.redis.RedisSessionDao;
 import com.henglong.cloud.config.shiro.*;
 import org.apache.shiro.cache.CacheManager;

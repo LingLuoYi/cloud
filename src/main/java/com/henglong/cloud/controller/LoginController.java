@@ -1,16 +1,13 @@
 package com.henglong.cloud.controller;
 
-import com.henglong.cloud.config.redis.RedisSessionDao;
 import com.henglong.cloud.config.shiro.NoPasswordToken;
 import com.henglong.cloud.entity.User;
 import com.henglong.cloud.service.StaticService;
+import com.henglong.cloud.util.EhCacheManager;
 import com.henglong.cloud.util.ExceptionUtil;
 import com.henglong.cloud.util.Json;
 import com.henglong.cloud.util.ValidateCode;
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.DefaultSessionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.shiro.SecurityUtils;
@@ -21,6 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+
 import javax.imageio.ImageIO;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -28,10 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 
 
 @CrossOrigin(allowCredentials = "true")
@@ -46,8 +42,6 @@ public class LoginController {
     @Autowired
     private StaticService staticService;
 
-    @Autowired
-    private RedisSessionDao redisSessionDao;
 
     //生成验证码图片
     @RequestMapping("/captcha/login_code.jpg")
@@ -55,6 +49,7 @@ public class LoginController {
         response.setHeader("Cache-Control", "no-cache");
         String verifyCode = ValidateCode.generateTextCode(ValidateCode.TYPE_ALL_MIXED, 6, null);
         request.getSession().setAttribute("LoginCode", verifyCode);
+        log.info("验证码存储："+request.getSession().getId());
         response.setContentType("image/jpeg");
         BufferedImage bim = ValidateCode.generateImageCode(verifyCode, 135, 30, 10, true, Color.WHITE, Color.BLUE, null);
         ImageIO.write(bim, "JPEG", response.getOutputStream());
@@ -73,6 +68,7 @@ public class LoginController {
         }
         //获取正确的验证码
         Session session = SecurityUtils.getSubject().getSession();
+        log.info("登录方法："+session.getId());
         String validateCode = (String) session.getAttribute("LoginCode");
         log.info("当前登录用户【" + user.getPhone() + "】，验证码为【" + validateCode + "】");
         //校验
@@ -144,6 +140,7 @@ public class LoginController {
             for (Session sessionsID : getLoginedSession(currentUser)) {
                 sessionsID.stop();
                 redisTemplate.delete("CLOUD_"+sessionsID.getId());
+                new EhCacheManager(redisTemplate).remove("CLOUD_"+sessionsID.getId());
 //                log.info("删除Session：CLOUD_"+sessionsID.getId());
                 log.info("其他设备以踢下线！");
             }
@@ -269,6 +266,7 @@ public class LoginController {
             for (Session sessionsID : getLoginedSession(currentUser)) {
                 sessionsID.stop();
                 redisTemplate.delete("CLOUD_"+sessionsID.getId());
+                new EhCacheManager(redisTemplate).remove("CLOUD_"+sessionsID.getId());
 //                log.info("删除Session:CLOUD_"+sessionsID.getId());
                 log.info("其他设备以踢下线！");
             }

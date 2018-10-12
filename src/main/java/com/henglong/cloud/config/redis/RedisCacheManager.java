@@ -1,4 +1,4 @@
-package com.henglong.cloud.config.shiro;
+package com.henglong.cloud.config.redis;
 
 import com.henglong.cloud.util.EhCacheManager;
 import org.apache.shiro.cache.Cache;

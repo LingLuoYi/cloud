@@ -33,30 +33,17 @@ public class EhCacheManager implements Cache{
 
     @Override//获取
     public Object get(Object o) throws CacheException {
-//        JedisConnectionFactory jedisConnectionFactory = (JedisConnectionFactory ) redisTemplate.getConnectionFactory();
-//        jedisConnectionFactory.setDatabase(1);
-//        redisTemplate.setConnectionFactory(jedisConnectionFactory);
-        log.info("获取缓存：key【"+o+"】");
         return redisTemplate.opsForValue().get(o);
     }
 
     @Override//添加
     public Object put(Object o, Object o2) throws CacheException {
-//        JedisConnectionFactory jedisConnectionFactory = (JedisConnectionFactory ) redisTemplate.getConnectionFactory();
-//        jedisConnectionFactory.setDatabase(1);
-//        redisTemplate.setConnectionFactory(jedisConnectionFactory);
-        log.info("添加缓存：key【"+o+"】，value【"+o2+"】");
-        log.info("redis"+redisTemplate);
-        redisTemplate.opsForValue().set(o, o2, 120, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set("CLOUD_"+o, o2, 120, TimeUnit.SECONDS);
         return o;
     }
 
     @Override//删除
     public Object remove(Object o) throws CacheException {
-//        JedisConnectionFactory jedisConnectionFactory = (JedisConnectionFactory ) redisTemplate.getConnectionFactory();
-//        jedisConnectionFactory.setDatabase(1);
-//        redisTemplate.setConnectionFactory(jedisConnectionFactory);
-        log.info("删除缓存：key【"+o+"】");
         Object o1 = redisTemplate.opsForValue().get(o);
         redisTemplate.opsForValue().getOperations().delete(o);
         return o1;
