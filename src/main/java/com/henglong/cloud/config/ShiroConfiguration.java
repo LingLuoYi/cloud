@@ -3,6 +3,7 @@ package com.henglong.cloud.config;
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import com.henglong.cloud.config.redis.RedisSessionDao;
 import com.henglong.cloud.config.shiro.*;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.slf4j.Logger;
@@ -150,6 +151,7 @@ public class ShiroConfiguration {
         return authorizationAttributeSourceAdvisor;
     }
 
+    //会话管理
     @Bean(name="sessionManager")
     public DefaultWebSessionManager configWebSessionManager(){
         ShiroSessionManager manager = new ShiroSessionManager();
@@ -161,7 +163,7 @@ public class ShiroConfiguration {
         manager.setSessionDAO(redisSessionDao());
         manager.setSessionValidationSchedulerEnabled(true);
         manager.setDeleteInvalidSessions(true);
-        manager.setSessionIdCookie(new SimpleCookie("Cloud_Session_id"));
+        manager.setSessionIdCookie(simpleCookie());
         return manager;
     }
 
@@ -174,15 +176,24 @@ public class ShiroConfiguration {
     public DefaultWebSecurityManager securityManager() {
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
         manager.setRealm(userRealm());
-        //manager.setCacheManager(cacheManager());
+        manager.setCacheManager(cacheManager());
         manager.setSessionManager(configWebSessionManager());
         return manager;
     }
 
+    @Bean(name = "cacheManagers")
+    public CacheManager cacheManager(){
+        return new RedisCacheManager();
+    }
 
     @Bean
     public RedisSessionDao redisSessionDao(){
         return new RedisSessionDao();
+    }
+
+    @Bean
+    public SimpleCookie simpleCookie(){
+        return new SimpleCookie("Cloud_Session_id");
     }
 
 

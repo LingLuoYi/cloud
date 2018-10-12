@@ -33,9 +33,7 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
         super();
         this.expireTime = expireTime;
         this.redisTemplate = redisTemplate;
-        JedisConnectionFactory jedisConnectionFactory = (JedisConnectionFactory ) redisTemplate.getConnectionFactory();
-        jedisConnectionFactory.setDatabase(0);
-        redisTemplate.setConnectionFactory(jedisConnectionFactory);
+//
     }
 
     @Override // 更新session
