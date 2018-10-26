@@ -11,4 +11,6 @@ public interface AssetsJpa extends JpaRepository<Assets,Integer> {
 
     Assets findByAssetsPayId(String id);
 
+    Assets findByAssetsPayIdAndAssetsPhone(String phone,String id);
+
 }
