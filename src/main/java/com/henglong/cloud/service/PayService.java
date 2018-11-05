@@ -38,8 +38,6 @@ public class PayService {
     @Autowired
     private BankJpa bankJpa;
 
-    @Autowired
-    private Time time;
 
     @Autowired
     private CommodityJpa commodityJpa;
@@ -205,7 +203,7 @@ public class PayService {
                 this.timer.cancel();
             if (pay.getVoucherState().equals("1"))
                 this.timer.cancel();
-            if (time.belongDate(new Date(),pay.getPayTime(),Integer.valueOf(FileConfig.OutputPath("pay-overtime","30")))){
+            if (Time.belongDate(new Date(),pay.getPayTime(),Integer.valueOf(FileConfig.OutputPath("pay-overtime","30")))){
                 //过期操作
                 //查询订单
                 Order order =  orderJpa.findByOrderId(pay.getPayOrderId());

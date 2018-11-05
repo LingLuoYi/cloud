@@ -1,26 +1,41 @@
 package com.henglong.cloud.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-@Service
 public class Time {
 
-    public String TimePuls(String time,Integer T) throws ParseException {
+    /** logger */
+    private static final Logger log = LoggerFactory.getLogger(Time.class);
+
+
+    public static String TimePuls(String time,Integer T) throws ParseException {
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         Date dt=sdf.parse(time);
         Calendar rightNow = Calendar.getInstance();
         rightNow.setTime(dt);
-        rightNow.add(Calendar.MONTH,T);;
+        rightNow.add(Calendar.MONTH,T);
         Date dt1=rightNow.getTime();
         return sdf.format(dt1);
     }
 
-    public int differentDays(Date date1,Date date2)
+    /**
+     * 计算天
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static int differentDays(Date date1,Date date2)
     {
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(date1);
@@ -47,13 +62,35 @@ public class Time {
                 }
             }
 
-            return (timeDistance + (day2-day1)+1) ;
+            return (timeDistance + (day2-day1)) ;
         }
         else //不同年
         {
-            return ((day2-day1)+1);
+            return ((day2-day1));
         }
     }
+
+    /**
+     * 计算分钟
+     * @param d1 //当前时间
+     * @param d2 //历史时间
+     * @return
+     */
+    public static long diffHours(Date d1,Date d2){
+        try{
+//            Date d1 = df.parse("2004-03-26 13:31:40");
+//            Date d2 = df.parse("2004-01-02 11:30:24");
+            long diff = d1.getTime() - d2.getTime();//这样得到的差值是微秒级别
+//            long days = diff / (1000 * 60 * 60 * 24);
+//            long hours = (diff-days*(1000 * 60 * 60 * 24))/(1000* 60 * 60);
+//            long minutes = (diff-days*(1000 * 60 * 60 * 24)-hours*(1000* 60 * 60))/(1000* 60);
+            return diff / (1000 * 60 * 60);
+        }catch (Exception e){
+            return -1;
+        }
+
+    }
+
 
 
     /**
@@ -65,7 +102,7 @@ public class Time {
      * @param n
      * @return
      */
-    public boolean belongDate(Date time, Date now, int n) {
+    public static boolean belongDate(Date time, Date now, int n) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calendar = Calendar.getInstance();  //得到日历
         calendar.setTime(now);//把当前时间赋给日历

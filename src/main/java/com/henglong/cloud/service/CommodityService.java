@@ -44,8 +44,6 @@ public class CommodityService {
     @Autowired
     private UserJpa userJpa;
 
-    @Autowired
-    private Time time;
 
 
     /**
@@ -147,6 +145,7 @@ public class CommodityService {
     }
 
 
+    //购买商品
     @Transactional(rollbackFor = Exception.class)
     public Order CommodityPurchase(String id, String num) throws Exception {
         //获取登录手机号
@@ -207,9 +206,9 @@ public class CommodityService {
                 order.setOrderStopTime("--");
             } else {
                 if (commodity.getCommodityTime().equals("0"))
-                    order.setOrderStopTime(time.TimePuls(tim, (Integer.valueOf(commodity.getCommodityTerm()))));
+                    order.setOrderStopTime(Time.TimePuls(tim, (Integer.valueOf(commodity.getCommodityTerm()))));
                 else
-                    order.setOrderStopTime(time.TimePuls(commodity.getCommodityTime(), Integer.valueOf(commodity.getCommodityTerm())));
+                    order.setOrderStopTime(Time.TimePuls(commodity.getCommodityTime(), Integer.valueOf(commodity.getCommodityTerm())));
                 order.setOrderTerm(commodity.getCommodityTerm());
             }
             order.setOrderTime(new Date());
@@ -257,7 +256,7 @@ public class CommodityService {
                 this.timer.cancel();
             }
             //判断订单是否过期
-            if (time.belongDate(new Date(), order.getOrderTime(), Integer.valueOf(FileConfig.OutputPath("overtime","30")))) {
+            if (Time.belongDate(new Date(), order.getOrderTime(), Integer.valueOf(FileConfig.OutputPath("overtime","30")))) {
                 //过期操作
                     //改变订单状态为过期
                     order.setOrderState("3");

@@ -12,6 +12,7 @@ import com.henglong.cloud.util.ExceptionUtil;
 import com.henglong.cloud.util.PrInfo;
 import com.henglong.cloud.util.Regular;
 import com.henglong.cloud.util.Time;
+import com.henglong.cloud.util.aop.aopName.Income;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,13 +43,12 @@ public class AssetsService {
     @Autowired
     private CommodityJpa commodityJpa;
 
-    @Autowired
-    private Time time;
 
     /**
      * 个人资产订单查询
      * @return
      */
+    @Income
     public PrInfo AssetsOneAllInfo(){
         String phone = (String) SecurityUtils.getSubject().getPrincipal();
         return ExceptionUtil.Info(assetsJpa.findByAssetsPhone(phone));
@@ -56,6 +56,7 @@ public class AssetsService {
 
     /**
      * 个人资产更新
+     * （弃用）
      */
     public void AssetsUpdate() throws ParseException {
         //获取登录用户
@@ -69,15 +70,15 @@ public class AssetsService {
             //判断当前资产是否有期限
             if(ass.getAssetsTerm().equals("0")){
                 //判断是否到达开始时间
-                if (time.belongDate(new Date(),new Date(sdf.parse(ass.getAssetsTime()).getTime()),0))
+                if (Time.belongDate(new Date(),ass.getAssetsTime(),0))
                     //计算时间
-                    ass.setAssetsDay(""+time.differentDays(new Date(sdf.parse(ass.getAssetsTime()).getTime()),new Date()));
+                    ass.setAssetsDay(""+Time.differentDays(ass.getAssetsTime(),new Date()));
             }else {
                 //判断是否到达开始时间
-                if (time.belongDate(new Date(),new Date(sdf.parse(ass.getAssetsTime()).getTime()),0))
+                if (Time.belongDate(new Date(),ass.getAssetsTime(),0))
                 //判断是否在时间段内
-                   if(!time.belongDate(new Date(),new Date(sdf.parse(ass.getAssetsTime()).getTime()),Integer.valueOf(ass.getAssetsTerm())))
-                       ass.setAssetsDay(""+time.differentDays(new Date(sdf.parse(ass.getAssetsTime()).getTime()),new Date()));
+                   if(!Time.belongDate(new Date(),ass.getAssetsTime(),Integer.valueOf(ass.getAssetsTerm())))
+                       ass.setAssetsDay(""+Time.differentDays(ass.getAssetsTime(),new Date()));
             }
             assetsJpa.save(ass);
         }
@@ -123,24 +124,26 @@ public class AssetsService {
                 assets.setAssetsPayId(id);
                 assets.setAssetsNum(order.getOrderNum());
                 assets.setAssetsPhone(pay.getPayPhone());
-                //收益计算公式暂未支持
+                //此处不计算收益
                 assets.setAssetsProfit(new BigDecimal("0"));
 
                 assets.setAssetsTerm(order.getOrderTerm());
                 assets.setAssetsType(order.getOrderCommodityType());
-                //价值是收益加上当前商品单价*商品数量，暂不支持
-                assets.setAssetsValue("");
+                //资产扣除费用初始值0
+                assets.setDeductions("0");
+
+                //功率
+                assets.setWatt(commodity.getCommodityWatt()+"*"+commodity.getCommodityPowerRate());
 
                 assets.setAssetsName(order.getOrderCommodityName());
-                //计算用户持有当前资产的天数
-                assets.setAssetsDay("");
+                //计算用户持有当前资产的天数初始值0
+                assets.setAssetsDay("0");
                 //时间
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 if (commodity.getCommodityTime().equals("0")) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String time = sdf.format(new Date());
-                    assets.setAssetsTime(time);
+                    assets.setAssetsTime(new Date());
                 } else {
-                    assets.setAssetsTime(commodity.getCommodityTime());
+                    assets.setAssetsTime(new Date(sdf.parse(commodity.getCommodityTime()).getTime()));
                 }
                 //改变资产状态
                 assets.setAssetsState("0");
@@ -203,7 +206,7 @@ public class AssetsService {
         assets1.setAssetsState(assets.getAssetsState());
         assets1.setAssetsDay(assets.getAssetsDay());
         assets1.setAssetsName(assets.getAssetsName());
-        assets1.setAssetsValue(assets.getAssetsValue());
+        assets1.setDeductions(assets.getDeductions());
         assets1.setAssetsType(assets.getAssetsType());
         assets1.setAssetsTerm(assets.getAssetsTerm());
         assets1.setAssetsProfit(assets.getAssetsProfit());

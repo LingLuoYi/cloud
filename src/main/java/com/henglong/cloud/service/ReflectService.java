@@ -24,6 +24,13 @@ public class ReflectService {
     @Autowired
     private ReflectJpa reflectJpa;
 
+    /**
+     * 发起提现订单
+     * @param assetsId
+     * @param num
+     * @param remarks
+     * @return
+     */
     public Object Reflects(String assetsId,BigDecimal num,String remarks){
         //创建提现订单
         Reflect reflect = new Reflect();
@@ -90,5 +97,15 @@ public class ReflectService {
         reflectJpa.save(reflect);
         assetsJpa.save(assets);
         return reflect;
+    }
+
+    /**
+     * 获取当前用户全部提现订单
+     * @return
+     */
+    public Object reflectAll(){
+        //获取用户
+        String phone = (String) SecurityUtils.getSubject().getPrincipal();
+        return reflectJpa.findByPhone(phone);
     }
 }

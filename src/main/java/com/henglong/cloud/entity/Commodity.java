@@ -28,6 +28,12 @@ public class Commodity {
     @Column(name = "commodity_Type")
     private String commodityType;
 
+    @Column(name = "commodity_watt")
+    private Integer commodityWatt;
+
+    @Column(name = "commodity_power_rate")
+    private Double commodityPowerRate;
+
     //交割时间，如果是0，则当天交割
     @Column(name = "commodity_time")
     private String commodityTime;
@@ -96,6 +102,22 @@ public class Commodity {
 
     public void setCommodityType(String commodityType) {
         this.commodityType = commodityType;
+    }
+
+    public Double getCommodityPowerRate() {
+        return commodityPowerRate;
+    }
+
+    public void setCommodityPowerRate(Double commodityPowerRate) {
+        this.commodityPowerRate = commodityPowerRate;
+    }
+
+    public Integer getCommodityWatt() {
+        return commodityWatt;
+    }
+
+    public void setCommodityWatt(Integer commodityWatt) {
+        this.commodityWatt = commodityWatt;
     }
 
     public String getCommodityTime() {

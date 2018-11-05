@@ -42,11 +42,11 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <file>/Logs/cloud_run_info.log</file>
+        <file>./Logs/cloud_run_info.log</file>
         <!--滚动策略-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--路径-->
-            <fileNamePattern>/Logs/cloud_run.info.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>./Logs/cloud_run.info.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
@@ -64,9 +64,9 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <file>/Logs/cloud_run_error.log</file>
+        <file>./Logs/cloud_run_error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/Logs/cloud_error.log.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>./Logs/cloud_error.log.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
@@ -83,9 +83,9 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</pattern>
             <charset>UTF-8</charset>
         </encoder>
-        <file>/Logs/cloud_run_warn.log</file>
+        <file>./Logs/cloud_run_warn.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/Logs/cloud_warn.log.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>./Logs/cloud_warn.log.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">

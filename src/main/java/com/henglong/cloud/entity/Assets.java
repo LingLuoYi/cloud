@@ -3,6 +3,7 @@ package com.henglong.cloud.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity(name = "Cloud_Assets")
 public class Assets {
@@ -28,13 +29,16 @@ public class Assets {
     private String assetsTerm;
 
     @Column(name = "assets_value")
-    private String assetsValue;
+    private String deductions;
+
+    @Column(name = "assets_watt")
+    private String watt;
 
     @Column(name = "assets_profit")
     private BigDecimal assetsProfit;
 
     @Column(name = "assets_time")
-    private String assetsTime;
+    private Date assetsTime;
 
     @Column(name = "assets_day")
     private String assetsDay;
@@ -94,12 +98,20 @@ public class Assets {
         this.assetsTerm = assetsTerm;
     }
 
-    public String getAssetsValue() {
-        return assetsValue;
+    public String getDeductions() {
+        return deductions;
     }
 
-    public void setAssetsValue(String assetsValue) {
-        this.assetsValue = assetsValue;
+    public void setDeductions(String deductions) {
+        this.deductions = deductions;
+    }
+
+    public String getWatt() {
+        return watt;
+    }
+
+    public void setWatt(String watt) {
+        this.watt = watt;
     }
 
     public BigDecimal getAssetsProfit() {
@@ -110,11 +122,11 @@ public class Assets {
         this.assetsProfit = assetsProfit;
     }
 
-    public String getAssetsTime() {
+    public Date getAssetsTime() {
         return assetsTime;
     }
 
-    public void setAssetsTime(String assetsTime) {
+    public void setAssetsTime(Date assetsTime) {
         this.assetsTime = assetsTime;
     }
 
