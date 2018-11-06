@@ -28,3 +28,4 @@ Logs/
 /mvnw
 /mvnw.cmd
 /number.operating
+/.gitignore
